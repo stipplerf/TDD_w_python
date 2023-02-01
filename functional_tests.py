@@ -36,18 +36,24 @@ class NewVisitorTest(unittest.TestCase):
 
         table = self.browser.find_element_by_id('id_list_table')
         rows = table.find_elements_by_tag_name('tr')
-        self.assertTrue(
-            any(row.text == '1: buy new shows' for row in rows)
-        )
+        self.assertIn('1: buy new shoes', [row.text for row in rows])
 
         #the input mask is still there waiting for another item
         #input is 'buy new shoe laces'
-        self.fail('Finish the test!')
+        inputbox = self.browser.find_element_by_id('id_new_item')
+        inputbox.send_keys('buy new shoe laces')
+        inputbox.send_keys(Keys.ENTER)
+        time.sleep(1)
 
         #page updates again and shows both items
+        table = self.browser.find_element_by_id('id_list_table')
+        rows = table.find_elements_by_tag_name('tr')
+        self.assertIn('1: buy new shoes', [row.text for row in rows])
+        self.assertIn('2: buy new shoe laces', [row.text for row in rows])
+
 
         #returns a unique url with the list for each user
-
+        self.fail('Finish the test!')
         #visiting that url shows the same items that were saved 
 
         #closing the window
