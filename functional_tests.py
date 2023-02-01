@@ -1,4 +1,6 @@
 from selenium import webdriver
+from selenium.webdriver.common.keys import Keys
+import time
 import unittest
 
 class NewVisitorTest(unittest.TestCase):
@@ -14,19 +16,43 @@ class NewVisitorTest(unittest.TestCase):
         self.browser.get('http://localhost:8000')
 
         self.assertIn('To-Do', self.browser.title)
+        header_text = self.browser.find_element_by_tag_name('h1').text
+        self.assertIn('To-Do', header_text)
+
+        #adding a "buy groceries"-item to the list
+        inputbox = self.browser.find_element_by_id('id_new_item')
+        self.assertEqual(
+            inputbox.get_attribute('placeholder'),
+            'Enter a to-do item'
+        )
+
+        #adding another item named "buy new shoes"
+        inputbox.send_keys('buy new shoes')
+
+        #page updates and shows the item
+        # in list format as '1: buy new shows'
+        inputbox.send_keys(Keys.ENTER)
+        time.sleep(1)
+
+        table = self.browser.find_element_by_id('id_list_table')
+        rows = table.find_elements_by_tag_name('tr')
+        self.assertTrue(
+            any(row.text == '1: buy new shows' for row in rows)
+        )
+
+        #the input mask is still there waiting for another item
+        #input is 'buy new shoe laces'
         self.fail('Finish the test!')
+
+        #page updates again and shows both items
+
+        #returns a unique url with the list for each user
+
+        #visiting that url shows the same items that were saved 
+
+        #closing the window
 
 if __name__ == '__main__':
     unittest.main(warnings='ignore')
 
-#adding a "buy groceries"-item to the list
 
-#adding another item
-
-#page updates and shows both items
-
-#returns a unique url with the list for each user
-
-#visiting that url shows the same items that were saved 
-
-#closing the window
