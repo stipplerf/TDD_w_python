@@ -81,7 +81,7 @@ class NewVisitorTest(LiveServerTestCase):
 
         #Francis visits the homepage. There is no sign of Edith's list
         self.browser.get(self.live_server_url)
-        page_text = self.browser.find_element_by_id('id_new_item')
+        page_text = self.browser.find_elements_by_id('id_new_item')
         self.assertNotIn('buy new shoes', page_text)
         self.assertNotIn('buy new shoe laces', page_text)
 
